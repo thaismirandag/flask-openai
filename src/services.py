@@ -1,8 +1,10 @@
 import logging
+from openai import AuthenticationError, OpenAIError
 from langchain_openai import OpenAI
-from langchain.chains import LLMChain
+from langchain.chains.llm import LLMChain
 from .prompts import petlove_assistant_prompt
 from .config import Config
+
 
 class AssistantPetLoveService:
     def __init__(self):
@@ -23,9 +25,15 @@ class AssistantPetLoveService:
         try:
             response = self.llm_chain.invoke({"question": question})
             return response
+        except AuthenticationError as e:
+            logging.error("Erro de autenticação: %s", e)
+            raise
+        except OpenAIError as e:
+            logging.error("Erro para obter uma resposta: %s", e)
+            raise
         except Exception as e:
-            logging.error("Erro ao obter resposta: %s", e)
-            return "Desculpe, ocorreu um erro"
+            logging.error("Erro inesperado para obter uma resposta: %s", e)
+            raise
 
     def format_response(self, data):
         answer = data.get("text", "Resposta não encontrada")

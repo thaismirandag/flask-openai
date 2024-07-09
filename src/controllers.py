@@ -1,5 +1,6 @@
 import logging
 from flask import Blueprint, jsonify, request
+from openai import AuthenticationError, OpenAIError
 from .services import AssistantPetLoveService
 
 api_openai = Blueprint('api', __name__, url_prefix='/api/ecommerce/v1')
@@ -22,6 +23,12 @@ def ask_question():
         formatted_response = service.format_response(response)
         return jsonify({"response":formatted_response}), 200
 
-    except Exception as e:
+    except AuthenticationError as e:
+        logging.error("Erro de autenticação: %s", e)
+        return jsonify({"error": "Chave da API OpenAI incorreta"}), 401
+    except OpenAIError as e:
         logging.error("Erro ao obter resposta: %s", e)
-        return jsonify({"error": "Ocorreu um erro ao obter uma resposta"}), 500
+        return jsonify({"error": "Erro para obter alguma resposta da API"}), 500
+    except Exception as e:
+        logging.error("Erro inesperado ao obter resposta: %s", e)
+        return jsonify({"error": "Ocorreu um erro para obter uma resposta"}), 500

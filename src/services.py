@@ -11,7 +11,7 @@ class AssistantPetLoveService:
         if self.api_key:
             try:
                 self.llm = OpenAI(model='gpt-3.5-turbo-instruct',
-                 temperature=0)
+                 temperature=0, max_tokens=500, api_key=self.api_key)
                 self.llm_chain = LLMChain(llm=self.llm, prompt=petlove_assistant_prompt)
             except Exception as e:
                 logging.error("Erro ao inicializar OpenAI %s:", e)

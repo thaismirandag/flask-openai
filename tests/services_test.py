@@ -27,7 +27,7 @@ class TestAssistantPetLoveService:
                                             max_tokens=500,
                                             api_key='api_openai_fake_key')
         mock_llm_chain.return_value = Mock()
-        mock_llm_chain.assert_called_once_with(llm=mock_openai_instance, 
+        mock_llm_chain.assert_called_once_with(llm=mock_openai_instance,
                                                prompt=petlove_assistant_prompt)
    
         assert service.llm is not None
@@ -44,13 +44,13 @@ class TestAssistantPetLoveService:
     @patch('src.services.LLMChain')
     def test_get_response_function_success(self, mock_llm_chain, reset_key_mock):
         mock_llm_chain_instance = mock_llm_chain.return_value
-        mock_llm_chain_instance.invoke.return_value= "Resposta teste"
+        mock_llm_chain_instance.invoke.return_value = {"text": "Resposta teste"}
 
         service = AssistantPetLoveService()
         question = "Qual a melhor ração para golden?"
         response = service.get_response(question)
-
         assert response == "Resposta teste"
+
         mock_llm_chain_instance.invoke.assert_called_once_with({"question":
                                                                 "Qual a melhor ração para golden?"})
 
@@ -65,6 +65,6 @@ class TestAssistantPetLoveService:
         question = "Qual a melhor ração para golden?"
         response = service.get_response(question)
 
-        assert response == "Desculpe, ocorreu um erro"
+        assert response == {"error": "Erro inesperado para obter uma resposta"}
         mock_llm_chain_instance.invoke.assert_called_once_with({"question":
                                                                 "Qual a melhor ração para golden?"})

@@ -9,4 +9,4 @@ class Config:
 
     def __validate_openai_api_key(self):
         if self.openai_api_key is None:
-            raise ValueError("Chave da API OPEN AI não encontrada.")
+            raise ValueError("Chave da API OpenAI não encontrada.")

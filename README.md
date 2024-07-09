@@ -27,5 +27,6 @@ docker-compose build
 docker-compose up
 # para inicializar o container
 ```
-A aplicação vai estar disponível em http://localhost:3000.
+A aplicação vai estar disponível em http://localhost:3000/{nome_endpoint}.
+nome_endpoint = /api/ecommerce/v1/question-and-answer
 
